@@ -11,8 +11,8 @@ German to English translation with Seq2Seq Transformer [1] in JAX.
 ## Notes
 
 1. The code is tested on Python 3.11.
-2. This is an educational code. The dataset is small and the translation quality is not great.
-3. The encoder part loosely follows [2] but is not guaranteed to produce the same results.
+2. This is an educational repo. The dataset is small and the translation quality is not great.
+3. The encoder part loosely follows [2] but is not the same code and is not guaranteed to produce the same results.
 
 ## References
 
