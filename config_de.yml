@@ -1,0 +1,11 @@
+emb_size: 512
+num_heads: 8
+ffn_hid_dim: 512
+batch_size: 128
+num_blocks: 4
+seq_len: 100
+dropout_prob: 0.1
+num_epochs: 30
+src_language: 'de'
+seed: 0
+ckpt_dir: '/absolute/path/to/ckpt'

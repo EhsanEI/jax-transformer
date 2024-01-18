@@ -1,0 +1,5 @@
+jax==0.4.23
+flax==0.7.5
+torchtext==0.15.2
+spacy==3.6.0
+datasets==2.15.0
