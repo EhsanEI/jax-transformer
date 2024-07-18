@@ -17,7 +17,7 @@ state, checkpoint_manager, save_args, step = load_state(config, state)
 main_rng = random.PRNGKey(config['seed'])
 
 
-def greedy_decode(state, rng, src_sentence, initial_input=""):
+def greedy_decode(state, transformer, rng, src_sentence, initial_input=""):
     src_item = pad_to_seq_len(text_transform['src'](src_sentence))
     src = jnp.array([src_item])
 
@@ -28,10 +28,11 @@ def greedy_decode(state, rng, src_sentence, initial_input=""):
     src_mask, tgt_mask = generate_mask(src, tgt_input)
 
     rng, dropout_apply_rng = random.split(rng)
+
     encoder_output = state.apply_fn(
         {'params': state.params},
         src=src, src_mask=src_mask,
-        train=False, decode=False,
+        train=False, method=transformer.encode,
         rngs={'dropout': dropout_apply_rng})
 
     translation = []
@@ -42,7 +43,7 @@ def greedy_decode(state, rng, src_sentence, initial_input=""):
         tgt_output = state.apply_fn(
             {'params': state.params},
             encoder_output=encoder_output, tgt=tgt_input, src_mask=src_mask, tgt_mask=tgt_mask,
-            train=False, encode=False,
+            train=False, method=transformer.decode,
             rngs={'dropout': dropout_apply_rng})
         tgt_output = tgt_output.argmax(axis=-1)
 
@@ -64,4 +65,4 @@ while True:
     src_sentence = input("Enter German text to translate or leave blank to exit:\n")
     if not src_sentence:
         break
-    print('Translation:', greedy_decode(state, rng, src_sentence), '\n')
+    print('Translation:', greedy_decode(state, transformer, rng, src_sentence), '\n')

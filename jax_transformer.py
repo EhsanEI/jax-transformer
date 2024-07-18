@@ -282,18 +282,10 @@ class Transformer(nn.Module):
             x = layer(x) if not isinstance(layer, nn.Dropout) else layer(x, deterministic=not train)
         return x
 
-    def __call__(self, src=None, tgt=None, src_mask=None, tgt_mask=None, 
-                 train=True, encoder_output=None, encode=True, decode=True):
-        assert encode or decode
-        if not decode:
-            out = self.encode(src, src_mask, train=train)
-        elif not encode:
-            decoder_output = self.decode(encoder_output, tgt, src_mask, tgt_mask, train=train)
-            out = self.project(decoder_output, train=train)
-        else:
-            encoder_output = self.encode(src, src_mask, train=train)
-            decoder_output = self.decode(encoder_output, tgt, src_mask, tgt_mask, train=train)
-            out = self.project(decoder_output, train=train)
+    def __call__(self, src=None, tgt=None, src_mask=None, tgt_mask=None, train=True):
+        encoder_output = self.encode(src, src_mask, train=train)
+        decoder_output = self.decode(encoder_output, tgt, src_mask, tgt_mask, train=train)
+        out = self.project(decoder_output, train=train)
         return out
 
 
